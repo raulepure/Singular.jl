@@ -241,4 +241,54 @@ void singular_define_ideals(jlcxx::Module & Singular)
         rChangeCurrRing(r);
         return idMinBase(I);
     });
+    Singular.method("hFirstSeries", 
+               [](ideal I, ring r, jlcxx::ArrayRef<int> ringweight, 
+                  jlcxx::ArrayRef<int> modulweight, jlcxx::ArrayRef<int> res) {
+               
+         rChangeCurrRing(r);
+         int s1 = ringweight.size();
+         int s2 = modulweight.size();
+         intvec *rw;
+         intvec *mw;
+
+         // ringweight/modulweight needed, if we consider graded modules
+         if (s1 != 0)
+         {
+           rw = new intvec(s1);
+           for (int i=0; i<s1; i++)
+           {(*rw)[i] = ringweight[i];}
+         }
+         else
+           {rw=NULL;}
+
+         if (s2 != 0)
+         {
+           for (int i=0; i<s2; i++)
+           {(*mw)[i] = modulweight[i];}
+         }
+         else
+         {mw = NULL;}
+
+         intvec *v = hFirstSeries(I, mw, currRing->qideal, rw);
+			int * content = v->ivGetVec();
+
+			for(int i=0; i<v->length(); i++)
+			{res.push_back(content[i]);}
+    });
+    Singular.method("hSecondSeries", 
+               [](jlcxx::ArrayRef<int> hseries1, jlcxx::ArrayRef<int> res) {
+               
+         int s = hseries1.size();
+         intvec *h1; 
+         h1 = new intvec(s);
+
+         for (int i=0; i<s; i++)
+         {(*h1)[i] = hseries1[i];}
+
+         intvec *v = hSecondSeries(h1);
+			int * content = v->ivGetVec();
+
+			for(int i=0; i<v->length(); i++)
+			{res.push_back(content[i]);}
+    });
 }

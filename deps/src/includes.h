@@ -31,6 +31,7 @@
 #include <kernel/ideals.h>
 #include <kernel/polys.h>
 #include <kernel/combinatorics/stairc.h>
+#include <kernel/combinatorics/hilb.h>
 #include <Singular/grammar.h>
 #include <Singular/libsingular.h>
 #include <Singular/fevoices.h>
