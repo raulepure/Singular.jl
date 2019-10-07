@@ -672,24 +672,24 @@ end
 ###############################################################################
 
 @doc Markdown.doc"""
-    hilbert_series(I::sidea{spoly{T}}l, S::PolyRing; number::Int=1, 
+    hilbert_series(I::sideal{spoly{T}}, S::PolyRing; number::Int=1,
     ring_weights::Array{Int, 1})
-> The function returns the numerator of the Hilbert-Poincaré series of 
-> $R/L(I)$, where $R$ is the parent ring of $I$ and $L(I)$ is the leading ideal 
-> of $I$. By default, the algorithm computes the first Hilbert series. 
+> The function returns the numerator of the Hilbert-Poincaré series of
+> $R/L(I)$, where $R$ is the parent ring of $I$ and $L(I)$ is the leading ideal
+> of $I$. By default, the algorithm computes the first Hilbert series.
 > Setting the optional argument 'number' to $2$, the second series is computed.
 > Passing an integer array of weights for the variables of $R$, the grading is
-> computed with respect to these weights. By default, the standard grading is 
-> used. 
+> computed with respect to these weights. By default, the standard grading is
+> used.
 > In case the ideal is homogeneous, the Hilbert-Poincaré series of $R/L(I)$ is
-> computed. 
-> The result is returned in the univariate polynomial ring S, which has to be 
+> computed.
+> The result is returned in the univariate polynomial ring S, which has to be
 > over ZZ.
 """
 function hilbert_series(I::sideal{spoly{T}}, S::PolyRing; number::Int=1, ring_weights::Array{Int, 1} = Array{Int, 1}()) where T <: Union{Field, Nemo.FieldElem}
-   
+
    nvars(S) != 1 && error("Ring has to be univariate")
-   
+
    S.base_ring != ZZ && error("Ring has to be over ZZ")
 
   if number == 1
@@ -708,17 +708,17 @@ function hilbert_series(I::sideal{spoly{T}}, S::PolyRing; number::Int=1, ring_we
 end
 
 @doc Markdown.doc"""
-    hilbert_series(I::sidea{spoly{T}}l; number::Int=1, 
+    hilbert_series(I::sideal{spoly{T}}; number::Int=1,
     ring_weights::Array{Int, 1})
-> The function returns the numerator of the Hilbert-Poincaré series of 
-> $R/L(I)$, where $R$ is the parent ring of $I$ and $L(I)$ is the leading ideal 
-> of $I$. By default, the algorithm computes the first Hilbert series. 
+> The function returns the numerator of the Hilbert-Poincaré series of
+> $R/L(I)$, where $R$ is the parent ring of $I$ and $L(I)$ is the leading ideal
+> of $I$. By default, the algorithm computes the first Hilbert series.
 > Setting the optional argument 'number' to $2$, the second series is computed.
 > Passing an integer array of weights for the variables of $R$, the grading is
-> computed with respect to these weights. By default, the standard grading is 
-> used. 
+> computed with respect to these weights. By default, the standard grading is
+> used.
 > In case the ideal is homogeneous, the Hilbert-Poincaré series of $R/L(I)$ is
-> computed. 
+> computed.
 """
 function hilbert_series(I::sideal{spoly{T}}; number::Int=1, ring_weights::Array{Int, 1} = Array{Int, 1}()) where T <: Union{Field, Nemo.FieldElem}
   S, = PolynomialRing(ZZ, ["t"])
@@ -731,7 +731,7 @@ function hilbert_first_series(I::sideal; ring_weights::Array{Int, 1} = Array{Int
 
   R = base_ring(I)
   n = nvars(R)
-  
+
   length(ring_weights) != 0 && length(ring_weights) != n && error("Ring weights have wrong length.")
 
   rw = Cint.(ring_weights)
@@ -743,7 +743,7 @@ end
 
 function hilbert_second_series(I::sideal; ring_weights::Array{Int, 1} = Array{Int, 1}())
 
-  h1 = hilbert_first_series(I; ring_weights=ring_weights)
+  h1 = hilbert_first_series(I; ring_weights = ring_weights)
   res = Array{Int32, 1}()
   libSingular.hSecondSeries(h1, res)
   return res

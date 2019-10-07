@@ -241,10 +241,10 @@ void singular_define_ideals(jlcxx::Module & Singular)
         rChangeCurrRing(r);
         return idMinBase(I);
     });
-    Singular.method("hFirstSeries", 
-               [](ideal I, ring r, jlcxx::ArrayRef<int> ringweight, 
+    Singular.method("hFirstSeries",
+               [](ideal I, ring r, jlcxx::ArrayRef<int> ringweight,
                   jlcxx::ArrayRef<int> modulweight, jlcxx::ArrayRef<int> res) {
-               
+
          rChangeCurrRing(r);
          int s1 = ringweight.size();
          int s2 = modulweight.size();
@@ -275,11 +275,11 @@ void singular_define_ideals(jlcxx::Module & Singular)
 			for(int i=0; i<v->length(); i++)
 			{res.push_back(content[i]);}
     });
-    Singular.method("hSecondSeries", 
+    Singular.method("hSecondSeries",
                [](jlcxx::ArrayRef<int> hseries1, jlcxx::ArrayRef<int> res) {
-               
+
          int s = hseries1.size();
-         intvec *h1; 
+         intvec *h1;
          h1 = new intvec(s);
 
          for (int i=0; i<s; i++)
