@@ -31,6 +31,7 @@
 #include <kernel/GBEngine/kstd1.h>
 #include <kernel/GBEngine/syz.h>
 #include <kernel/GBEngine/tgb.h>
+#include <kernel/linear_algebra/MinorInterface.h>
 #include <kernel/ideals.h>
 #include <kernel/polys.h>
 #include <kernel/combinatorics/stairc.h>

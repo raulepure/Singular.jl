@@ -52,6 +52,21 @@ end
    @test deepcopy(M) == M
 end
 
+@testset "smatrix.minors..." begin
+   R, (x, y) = PolynomialRing(QQ, ["x", "y"])
+
+   Z0 = zero_matrix(R, 3, 3)
+   Z1 = identity_matrix(R, 3)
+   Z2 = zero_matrix(R, 4, 3)
+   Z0[1, 1] = x
+
+   @test det(Z0) == R(0)
+   @test det(Z1) == R(1)
+   
+   @test size(minors(Z0, 1))[1] == 1
+   @test size(minors(Z2, 1, all = true))[1] == 12
+end
+
 @testset "smatrix.binary_ops..." begin
    R, (x, y) = PolynomialRing(QQ, ["x", "y"])
 

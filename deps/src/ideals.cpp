@@ -243,12 +243,12 @@ void singular_define_ideals(jlcxx::Module & Singular)
         const ring origin = currRing;
         rChangeCurrRing(r);
         ideal J = idMinBase(I);
-	rChangeCurrRing(origin);
-	return J;
+        rChangeCurrRing(origin);
+        return J;
     });
     Singular.method("scIndIndset", [](ideal I, ring r, jlcxx::ArrayRef<int> a, bool all) {
         const ring origin = currRing;
-	rChangeCurrRing(r);
+	     rChangeCurrRing(r);
         lists L = scIndIndset(I, all, r->qideal);
         int n = rVar(r);
         int m = lSize(L);
@@ -277,9 +277,16 @@ void singular_define_ideals(jlcxx::Module & Singular)
     });
     Singular.method("scDimInt", [](ideal I, ring R) {
         const ring origin = currRing;
-	rChangeCurrRing(R);
+	     rChangeCurrRing(R);
         int k = scDimInt(I, R->qideal);
-	rChangeCurrRing(origin);
-	return k;
+	     rChangeCurrRing(origin);
+        return k;
+    });
+    Singular.method("getMinorIdealHeuristic", [](matrix M, ring r, int k, int l, void * R) {
+        const ring origin = currRing;
+        rChangeCurrRing(r);
+        ideal J = getMinorIdealHeuristic(M, k, l, reinterpret_cast<ideal>(R), false);
+        rChangeCurrRing(origin);
+	     return J;
     });
 }

@@ -1,4 +1,5 @@
-export identity_matrix, MatrixSpace, nrows, ncols, smatrix, zero_matrix
+export det, identity_matrix, MatrixSpace, minors, nrows, ncols, 
+       smatrix, zero_matrix
 
 ###############################################################################
 #
@@ -196,6 +197,37 @@ function (S::MatrixSpace{T})(ptr::libSingular.matrix_ref) where T <: AbstractAlg
    M = smatrix{T}(base_ring(S), ptr)
    (S.ncols != ncols(M) || S.nrows != nrows(M)) && error("Incompatible dimensions")
    return M
+end
+
+###############################################################################
+#
+#   Determinants and Minors
+#
+###############################################################################
+
+@doc Markdown.doc"""
+   det(M::smatrix{T}) where T <: AbstractAlgebra.RingElem
+> Given a quadratic matrix $M$, the algorithm returns the determinant of $M$.
+"""
+function det(M::smatrix{T}) where T <: AbstractAlgebra.RingElem
+   nrows(M) != ncols(M) && error("Matrix is not quadratic")
+   R = base_ring(M)
+   ptr = libSingular.mp_Det(M.ptr, R.ptr)
+   return R(ptr)
+end
+
+@doc Markdown.doc"""
+   minors(M::smatrix{T}, k::Int; all::Bool = false) where T <: AbstractAlgebra.RingElem
+> Return an array containing the non-zero $k \times k$ minors of $M$.
+> If the optional parameter 'all' is set to 'true', all minors will be returend.
+"""
+function minors(M::smatrix{T}, k::Int; all::Bool = false) where T <: AbstractAlgebra.RingElem
+   k > min(nrows(M), ncols(M)) && error("Matrix does not have minors of size ", k, "x", k)
+   R = base_ring(M)
+   ptr = libSingular.getMinorIdealHeuristic(M.ptr, R.ptr, Int32(k), Int32(0), C_NULL)
+   !all && libSingular.idSkipZeroes(ptr)
+   I = Ideal(R, ptr)
+   return gens(I)
 end
 
 ###############################################################################

@@ -50,4 +50,7 @@ void singular_define_matrices(jlcxx::Module & Singular)
         omFree(str_ptr);
         return s;
     });
+    Singular.method("mp_Det", [](matrix M, ring R) {
+        return mp_Det(M, R);
+    });
 }
